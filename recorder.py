@@ -3,6 +3,7 @@ import os
 import argparse
 import yaml
 from datetime import datetime
+import time
 
 
 def get_params_file_name(ns, node_name):
@@ -30,6 +31,10 @@ def prepare_output_dir(params_file_name):
 def main(node_name, ns, package_name, executable_name, remapping_file):
     rclpy.init()
     node = rclpy.create_node("node_input_topic_recorder")
+
+    # Need to wait for slow discovery protocol
+    time.sleep(5)
+
     # names = node.get_node_names()
     info = node.get_subscriber_names_and_types_by_node(node_name, ns)
 
