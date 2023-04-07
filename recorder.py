@@ -11,7 +11,7 @@ def get_params_file_name(ns, node_name):
     if ns_modified[0] == '/':
         ns_modified = ns_modified[1:]
     params_file_name = ns_modified + "/" + node_name + ".yaml"
-    return  params_file_name.replace("/", "__")
+    return params_file_name.replace("/", "__")
 
 
 def prepare_output_dir(params_file_name):
@@ -46,7 +46,7 @@ def main(node_name, ns, package_name, executable_name, remapping_file):
     params_file_name = get_params_file_name(ns, node_name)
     prepare_output_dir(params_file_name)
 
-    os.system("ros2 param dump " + ns + "/" + node_name)
+    os.system(f"ros2 param dump {ns}/{node_name} > {params_file_name}")
 
     record_command = "ros2 bag record"
     for topic_and_types in info:
@@ -66,6 +66,7 @@ def main(node_name, ns, package_name, executable_name, remapping_file):
 
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Record input topic data for the target node")
