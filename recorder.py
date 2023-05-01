@@ -48,7 +48,7 @@ def main(node_name, ns, package_name, executable_name, remapping_file):
 
     os.system(f"ros2 param dump {ns}/{node_name} > {params_file_name}")
 
-    record_command = "ros2 bag record"
+    record_command = "ros2 bag record /tf /tf_static"
     for topic_and_types in info:
         topic, types = topic_and_types
         record_command = record_command + " " + topic
