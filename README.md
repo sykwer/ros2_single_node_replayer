@@ -54,3 +54,18 @@ ros2 bag play rosbag2_%Y_%m_%d_%H_%M_%S
 
 Do not forget to source the ROS 2 App's `setup.bash` in each terminal.
 Note that if you set, for example, `-r 0.2` when running the whole ROS 2 App to play the rosbag at 1/5 the frequency, the single node operation will run at that same 1/5 frequency without specifying `-r 0.2` when playing the generated rosbag.
+
+## Notice
+### Early return due to subscription count
+Codes in a ROS 2 App sometimes have a guard at the beginning of the callback like below.
+```cpp
+if (some_publisher_->get_subscription_count() == 0) return;
+```
+
+In the single node operation mechanism, no other nodes subscribe to the topic, so the code will always return at this point.
+You will need to remove this part or make necessary adjustments before running the single node.
+
+### Timing issue
+Note that topic messages that flow into the target node cannot be recorded between the start of the ROS 2 App and the start of the tool.
+If there are any missed important data, the internal state of the node may become unexpected.
+At the time of writing this document, it is unclear whether a mechanism to prevent data loss can be implemented, but ideally, no data should be missed.
